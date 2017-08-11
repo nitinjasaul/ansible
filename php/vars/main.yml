@@ -1,0 +1,26 @@
+---
+# vars file for php
+# For CentOS give version=55 or 56 or 70 in extra vars 
+
+php_centos:
+    - php{{ version }}w
+    - php{{ version }}w-opcache 
+    - php{{ version }}w-xml 
+    - php{{ version }}w-mcrypt 
+    - php{{ version }}w-gd 
+    - php{{ version }}w-devel 
+    - php{{ version }}w-mysql 
+    - php{{ version }}w-intl 
+    - php{{ version }}w-mbstring 
+    - php{{ version }}w-bcmath
+
+########### PHP Package for Ubuntu 
+# For Ubuntu give version=5.5 or 5.6 or 7.0 in extra vars 
+
+php_ubuntu:
+  - php{{ version }} 
+  - php{{ version }}-mcrypt 
+  - php{{ version }}-mysql 
+  - php{{ version }}-curl
+  - php{{ version }}-json 
+  - php{{ version }}-cgi

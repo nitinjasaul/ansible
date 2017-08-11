@@ -1,0 +1,68 @@
+---
+
+- name: Checking if Apache installed
+  stat: path=/etc/init.d/httpd
+  register: status
+
+- name: Installing Apache
+  become: true
+  yum: name={{ item }} state=present
+  when: not status.stat.exists
+  with_items:
+    - httpd
+    - httpd-devel
+  notify: 
+    - httpd start
+
+- name: Check if EPEL repo is already configured.
+  stat: path={{ epel_repofile_path }}
+  register: epel_repofile_result
+
+- name: Install EPEL repo.
+  yum:
+    name: "{{ epel_repo_url }}"
+    state: present
+  register: result
+  until: '"failed" not in result'
+  retries: 5
+  when: not epel_repofile_result.stat.exists
+
+- name: Import EPEL GPG key.
+  rpm_key:
+    key: "{{ epel_repo_gpg_key_url }}"
+    state: present
+  when: not epel_repofile_result.stat.exists
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Checking for PHP repo
+  yum:
+    list=webtatic-release-*.noarch
+  register: result
+
+- name: Adding PHP Repository
+  command: rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
+  when: "'${result.stdout}'.find('webtatic') == -1"
+#  when: result.results[0].yumstate != '-1'
+  ignore_errors: true
+
+- name: Checking if PHP already installed
+  shell: which php
+  register: installed
+  failed_when: no
+
+- name: Installing PHP {{ version }}
+  yum: name={{ php_centos }} state=present
+  when: installed.rc != 0
+#  with_items: "{{ php70_packages }}"
+#  with_items:
+#    - php{{ php_centos }}w
+#    - php{{ php_centos }}w-mcrypt
+#    - php{{ php_centos }}w-cli
+#    - php{{ php_centos }}w-mysql
+#    - php{{ php_centos }}w-gd
+#    - php{{ php_centos }}w-intl
+#    - php{{ php_centos }}w-xsl
+#    - php{{ php_centos }}w-curl
+  notify: 
+    - httpd start
+

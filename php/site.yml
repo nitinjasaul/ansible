@@ -1,0 +1,9 @@
+---
+- hosts: ubuntu
+#- hosts: "{{ hosts }}"
+  roles:
+    #- { role: "php" }
+    - { role: "/home/nitin/ansible/php" }
+  remote_user: vagrant
+  become: true
+        

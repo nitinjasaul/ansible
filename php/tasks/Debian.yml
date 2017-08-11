@@ -1,0 +1,28 @@
+---
+
+- name: Check for Apache already installed
+  stat: path=/etc/init.d/apache2
+  register: status
+
+- name: Installing Apache & other required dependencies for PHP
+  apt: name={{ item }} state=present update_cache=yes
+  with_items:
+    - apache2
+    - python-software-properties
+  when: not status.stat.exists
+
+- name: Adding Repo for PHP
+  apt_repository:
+    repo: ppa:ondrej/php
+    update_cache: yes
+
+- name: Checking if PHP already installed
+  shell: which php
+  register: installed
+  failed_when: no
+
+- name: Installing PHP
+  apt: name={{ php_ubuntu }} state=present
+  when: installed.rc != 0
+  notify: 
+    - apache2 restart
