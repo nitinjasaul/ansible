@@ -1,5 +1,5 @@
 ---
-- hosts: ubuntu
+- hosts: centos
 #- hosts: "{{ hosts }}"
   roles:
     #- { role: "php" }
