@@ -1,31 +1,66 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Role to install different versions of PHP on Ubuntu/CentOS.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Python must be installed on the node machine.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Epel repository URLs -
 
-Dependencies
-------------
+epel_repo_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm"
+epel_repo_gpg_key_url: "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+epel_repofile_path: "/etc/yum.repos.d/epel.repo"
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+variables in vars/main.yml
+
+# For CentOS give version=55 or 56 or 70 in extra vars 
+php_centos:
+  - php{{ version }}w
+  - php{{ version }}w-opcache
+  - php{{ version }}w-xml
+  - php{{ version }}w-mcrypt
+  - php{{ version }}w-gd
+  - php{{ version }}w-devel
+  - php{{ version }}w-mysql
+  - php{{ version }}w-intl
+  - php{{ version }}w-mbstring
+  - php{{ version }}w-bcmath
+
+# For Ubuntu give version=5.5 or 5.6 or 7.0 in extra vars 
+php_ubuntu:
+  - php{{ version }}
+  - php{{ version }}-mcrypt
+  - php{{ version }}-mysql
+  - php{{ version }}-curl
+  - php{{ version }}-json
+  - php{{ version }}-cgi
+
 
 Example Playbook
 ----------------
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    - hosts: centos or ubuntu
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: php }
+         
+How to run the Playbook
+-----------------------
+
+- For CentOS
+
+ansible-playbook -i hosts(your host file) site.yml --extra-vars version=55/56/70 or 71
+
+- For Ubuntu
+
+ansible-playbook -i hosts(your host file) site.yml --extra-vars version=5.5/5.6/7.0 or 7.1
 
 License
 -------
@@ -35,4 +70,4 @@ BSD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+http://opstree.com
