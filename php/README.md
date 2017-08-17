@@ -19,7 +19,7 @@ epel_repofile_path: "/etc/yum.repos.d/epel.repo"
 
 variables in vars/main.yml
 
-# For CentOS give version=55 or 56 or 70 in extra vars 
+- For CentOS give version=55 or 56 or 70 or 71 in extra vars
 php_centos:
   - php{{ version }}w
   - php{{ version }}w-opcache
@@ -32,7 +32,7 @@ php_centos:
   - php{{ version }}w-mbstring
   - php{{ version }}w-bcmath
 
-# For Ubuntu give version=5.5 or 5.6 or 7.0 in extra vars 
+- For Ubuntu give version=5.5 or 5.6 or 7.0 or 7.1 in extra vars 
 php_ubuntu:
   - php{{ version }}
   - php{{ version }}-mcrypt
