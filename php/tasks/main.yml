@@ -1,12 +1,12 @@
 ---
 # tasks file for php
 
-- name: Ubuntu
+- name: Install PHP on Ubuntu
   include: Debian.yml
   when:
     - ansible_os_family == "Debian"
 
-- name: CentOS
+- name: Install PHP on CentOS
   include: Redhat.yml
   when:
     - ansible_os_family == "RedHat"
