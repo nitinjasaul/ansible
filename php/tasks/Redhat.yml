@@ -43,16 +43,13 @@
   command: rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
   when: 
     - "'${result.stdout}'.find('webtatic') == -1"
-#    - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "6"
-#  when: result.results[0].yumstate != '-1'
   ignore_errors: true
 
 - name: Adding PHP Repository
   command: rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
   when: 
     - "'${result.stdout}'.find('webtatic') == -1"
-#    - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "7"
   ignore_errors: true
 
@@ -64,16 +61,6 @@
 - name: Installing PHP {{ version }}
   yum: name={{ php_centos }} state=present
   when: installed.rc != 0
-#  with_items: "{{ php70_packages }}"
-#  with_items:
-#    - php{{ php_centos }}w
-#    - php{{ php_centos }}w-mcrypt
-#    - php{{ php_centos }}w-cli
-#    - php{{ php_centos }}w-mysql
-#    - php{{ php_centos }}w-gd
-#    - php{{ php_centos }}w-intl
-#    - php{{ php_centos }}w-xsl
-#    - php{{ php_centos }}w-curl
   notify: 
     - httpd start
 
